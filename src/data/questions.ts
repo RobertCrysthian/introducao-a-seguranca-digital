@@ -195,6 +195,86 @@ export const questionsByMission: Record<string, Question[]> = {
         'Prestar atenção no endereço, no excesso de anúncios e em preços bons demais com pressa ajuda a evitar a maioria dos golpes. Uma página lenta ou fora do topo da pesquisa não diz nada sobre ser falsa.',
     },
   ],
+  '04': [
+    {
+      id: '04-1',
+      type: 'multiple-choice',
+      prompt: 'Numa loja que você não conhece, qual forma de pagamento é a mais arriscada?',
+      options: [
+        {
+          id: 'a',
+          text: 'Cartão de crédito virtual',
+          feedback:
+            'O cartão virtual é uma das opções mais seguras: o número pode ser apagado depois da compra e a cobrança pode ser contestada.',
+        },
+        { id: 'b', text: 'Pix para uma pessoa física com nome diferente do da loja' },
+        {
+          id: 'c',
+          text: 'Pagamento pelo checkout oficial de uma plataforma conhecida',
+          feedback:
+            'O checkout oficial de uma plataforma conhecida segura o pagamento e oferece suporte se algo der errado.',
+        },
+        {
+          id: 'd',
+          text: 'Cartão de crédito com aviso de compra ativado',
+          feedback:
+            'Com o aviso ativado, você fica sabendo na hora de qualquer cobrança e pode contestar com o banco.',
+        },
+      ],
+      correctOptionId: 'b',
+      feedback:
+        'Um Pix cai na hora e é difícil de reverter. Se o nome de quem recebe não bate com o da loja, é um sinal forte de golpe.',
+    },
+    {
+      id: '04-2',
+      type: 'true-false',
+      statement:
+        '“Compras feitas pela internet podem ser canceladas em até 7 dias depois do recebimento, mesmo sem justificativa.”',
+      answer: true,
+      wrongFeedback: 'A lei garante esse prazo para compras feitas fora da loja física, sem precisar explicar o motivo.',
+      feedback:
+        'É o direito de arrependimento (art. 49 do Código de Defesa do Consumidor). Faça o pedido pelos canais oficiais da loja e guarde os comprovantes.',
+    },
+  ],
+  '05': [
+    {
+      id: '05-1',
+      type: 'multiple-choice',
+      prompt:
+        'Chega no WhatsApp, de um número desconhecido: “Oi mãe, troquei de número. Preciso de um Pix urgente, depois te explico.” O que fazer?',
+      options: [
+        {
+          id: 'a',
+          text: 'Fazer o Pix, porque é urgente',
+          feedback: 'A urgência é justamente a armadilha: ela serve para você agir sem pensar.',
+        },
+        {
+          id: 'b',
+          text: 'Perguntar pelo mesmo número se é mesmo seu filho',
+          feedback: 'Quem está do outro lado é o próprio golpista, e ele vai responder que sim.',
+        },
+        { id: 'c', text: 'Ligar para o número antigo e conhecido da pessoa para confirmar' },
+        {
+          id: 'd',
+          text: 'Mandar metade do valor por segurança',
+          feedback: 'Qualquer valor enviado vai para o golpista. Mandar metade não diminui o risco, só o prejuízo.',
+        },
+      ],
+      correctOptionId: 'c',
+      feedback:
+        'O golpista conta com a pressa e com a emoção da vítima. Confirme sempre por outro canal, como uma ligação para o número que você já conhece.',
+    },
+    {
+      id: '05-2',
+      type: 'true-false',
+      statement:
+        '“Um funcionário do banco pode ligar e pedir sua senha ou o código do SMS para cancelar uma compra suspeita.”',
+      answer: false,
+      wrongFeedback: 'Esse é um dos golpes mais comuns: a “central do banco” é, na verdade, o golpista.',
+      feedback:
+        'Bancos nunca pedem senha, código ou transferência por telefone. Se receber uma ligação assim, desligue e ligue você mesmo para o número que está atrás do cartão.',
+    },
+  ],
 }
 
 export function getQuestions(missionId: string) {
