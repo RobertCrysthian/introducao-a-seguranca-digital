@@ -19,6 +19,10 @@ type Placement = Record<string, string | undefined>
 
 const POOL = 'pool'
 
+function capitalize(text: string) {
+  return text.charAt(0).toUpperCase() + text.slice(1)
+}
+
 function shuffle<T>(list: T[]) {
   const copy = [...list]
   for (let i = copy.length - 1; i > 0; i--) {
@@ -103,6 +107,7 @@ export function DragAndDropQuestion({ question, number, onCorrect }: DragAndDrop
           status={status}
           selected={selectedId === item.id}
           locked={solved}
+          monospace={question.monospace}
           onSelect={() => toggleSelect(item.id)}
         />
       </li>
@@ -122,12 +127,16 @@ export function DragAndDropQuestion({ question, number, onCorrect }: DragAndDrop
           )}
         >
           {pool.length > 0 ? (
-            <ul className="flex flex-wrap gap-2" role="list" aria-label="Atitudes para classificar">
+            <ul
+              className="flex flex-wrap gap-2"
+              role="list"
+              aria-label={`${capitalize(question.itemNoun.plural)} para classificar`}
+            >
               {pool.map(renderItem)}
             </ul>
           ) : (
             <p className="py-2 text-center text-sm text-text-subtle">
-              Todas as atitudes foram classificadas. Arraste uma para cá se quiser devolvê-la.
+              Tudo foi classificado. Arraste de volta para cá se quiser mudar algo.
             </p>
           )}
         </div>
@@ -168,7 +177,7 @@ export function DragAndDropQuestion({ question, number, onCorrect }: DragAndDrop
                 </button>
               ) : (
                 placed.length === 0 && (
-                  <p className="m-auto text-center text-xs text-text-faint">Solte as atitudes aqui</p>
+                  <p className="m-auto text-center text-xs text-text-faint">Solte aqui</p>
                 )
               )}
             </div>
@@ -190,7 +199,7 @@ export function DragAndDropQuestion({ question, number, onCorrect }: DragAndDrop
           )}
           {!allPlaced && !checked && (
             <span className="text-sm text-text-subtle">
-              Arraste ou toque em uma atitude e depois na categoria.
+              Arraste para a categoria, ou toque no cartão e depois na categoria.
             </span>
           )}
         </div>
@@ -207,12 +216,12 @@ export function DragAndDropQuestion({ question, number, onCorrect }: DragAndDrop
               tone="error"
               title={
                 wrongItems.length === 1
-                  ? '1 atitude está na categoria errada.'
-                  : `${wrongItems.length} atitudes estão na categoria errada.`
+                  ? `1 ${question.itemNoun.singular} está na categoria errada.`
+                  : `${wrongItems.length} ${question.itemNoun.plural} estão na categoria errada.`
               }
             >
-              As marcadas em vermelho estão no lugar errado: use “Tentar novamente” para devolvê-las e
-              reorganizar. {question.feedback}
+              O que está marcado em vermelho está no lugar errado: use “Tentar novamente” para devolver
+              ao banco e reorganizar. {question.feedback}
             </QuestionFeedback>
           ))}
       </div>
@@ -225,10 +234,11 @@ type ItemCardProps = {
   status?: 'right' | 'wrong'
   selected: boolean
   locked: boolean
+  monospace?: boolean
   onSelect: () => void
 }
 
-function ItemCard({ item, status, selected, locked, onSelect }: ItemCardProps) {
+function ItemCard({ item, status, selected, locked, monospace, onSelect }: ItemCardProps) {
   const [dragging, setDragging] = useState(false)
   const StatusIcon = status === 'right' ? Check : status === 'wrong' ? X : GripVertical
 
@@ -266,7 +276,7 @@ function ItemCard({ item, status, selected, locked, onSelect }: ItemCardProps) {
         )}
         aria-hidden
       />
-      <span>{item.text}</span>
+      <span className={cn(monospace && 'font-mono break-all')}>{item.text}</span>
       {status && <span className="sr-only">{status === 'right' ? '(correto)' : '(incorreto)'}</span>}
     </button>
   )
