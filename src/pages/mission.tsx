@@ -1,10 +1,13 @@
+import { useState } from 'react'
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router'
 import { Eyebrow } from '@/components/common/eyebrow'
 import { InfoCallout } from '@/components/common/info-callout'
 import { Tag } from '@/components/common/tag'
+import { QuestionRenderer } from '@/components/quiz/question-renderer'
 import { Button } from '@/components/ui/button'
 import { getMission, missionPath, missions } from '@/data/missions'
+import { getQuestions } from '@/data/questions'
 import { useJourney } from '@/features/progress/use-journey'
 
 /**
@@ -17,6 +20,8 @@ export function MissionPage() {
   const navigate = useNavigate()
   const journey = useJourney()
   const mission = getMission(missionId)
+  // Ids das questões acertadas (são prefixados pela missão, então não colidem entre missões)
+  const [correctIds, setCorrectIds] = useState<Set<string>>(() => new Set())
 
   if (!mission) return <Navigate to="/" replace />
   // Guarda de rota: missões bloqueadas não podem ser acessadas pela URL.
@@ -25,6 +30,8 @@ export function MissionPage() {
   const index = missions.indexOf(mission)
   const next = missions[index + 1]
   const completed = journey.missions[index].status === 'completed'
+  const questions = getQuestions(mission.id)
+  const allCorrect = questions.every((question) => correctIds.has(question.id))
 
   function handleComplete() {
     journey.completeMission(mission!.id)
@@ -44,10 +51,23 @@ export function MissionPage() {
         {mission.title}
       </h1>
 
-      <InfoCallout title="Conteúdo em construção">
-        As atividades desta missão serão adicionadas em breve. Por enquanto, conclua a missão para
-        liberar a próxima e acompanhar seu progresso na barra lateral.
-      </InfoCallout>
+      {questions.length > 0 ? (
+        <div className="space-y-12">
+          {questions.map((question, i) => (
+            <QuestionRenderer
+              key={question.id}
+              question={question}
+              number={i + 1}
+              onCorrect={() => setCorrectIds((ids) => new Set(ids).add(question.id))}
+            />
+          ))}
+        </div>
+      ) : (
+        <InfoCallout title="Conteúdo em construção">
+          As atividades desta missão serão adicionadas em breve. Por enquanto, conclua a missão para
+          liberar a próxima e acompanhar seu progresso na barra lateral.
+        </InfoCallout>
+      )}
 
       <div className="flex flex-wrap items-center gap-3">
         <Button variant="outline" asChild className="h-11 px-4">
@@ -61,10 +81,13 @@ export function MissionPage() {
             <Check className="size-4" aria-hidden /> Missão concluída
           </span>
         ) : (
-          <Button onClick={handleComplete} className="h-11 px-4">
+          <Button onClick={handleComplete} disabled={!allCorrect} className="h-11 px-4">
             Concluir missão
             <ArrowRight data-icon="inline-end" />
           </Button>
+        )}
+        {!completed && !allCorrect && (
+          <span className="text-sm text-text-subtle">Acerte as questões para concluir a missão.</span>
         )}
       </div>
     </div>

@@ -29,6 +29,7 @@
     --palette-cyan-400: #50d8ee;
     --palette-cyan-700: #1b7f98;
     --palette-mint-400: #5edc9f;
+    --palette-coral-400: #f2726f;
 
     /* Tokens semânticos (shadcn) */
     --background: var(--palette-ink-950);
@@ -45,7 +46,7 @@
     --muted-foreground: var(--palette-text-400);
     --accent: var(--palette-ink-800);
     --accent-foreground: var(--palette-text-100);
-    --destructive: oklch(0.704 0.191 22.216);
+    --destructive: var(--palette-coral-400);
     --border: var(--palette-ink-700);
     --input: var(--palette-ink-700);
     --ring: var(--palette-cyan-400);

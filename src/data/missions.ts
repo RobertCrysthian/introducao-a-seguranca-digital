@@ -6,8 +6,8 @@ export type Mission = {
 }
 
 const titles = [
-  'Por que se proteger?',
-  'Contas e e-mails',
+  'Proteção de conta e senhas fortes',
+  'Navegação segura na internet',
   'Proteja suas contas!',
   'Fui invadido, e agora?',
   'Navegando com segurança',
